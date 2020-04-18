@@ -25,7 +25,11 @@ function finAnswer(convertType, value) {
 
 let answer = finAnswer(type, userValue);
 
-console.log(answer);
+
+console.log("Base 2" + " " + answer);
+
+let hexAns = parseInt(answer, 2).toString(16);
+console.log("Base 16" + " " + hexAns);
 
 function converter(whole, fract, exponent) {
 
@@ -54,6 +58,8 @@ function converter(whole, fract, exponent) {
 
     return answer;
 }
+
+
 
 function decToFloat(value) {
     let number = Number(value);
