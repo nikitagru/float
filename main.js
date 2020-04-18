@@ -9,7 +9,7 @@
 // преобразовывать числа в нормализованный вид 
 
 
-let userValue = "34.56";
+let userValue = "35.25";
 
 let type = "decToFloat";
 
@@ -28,18 +28,22 @@ let answer = finAnswer(type, userValue);
 console.log(answer);
 
 function converter(whole, fract, exponent) {
+
+    // console.log("exponent" + " " + exponent.toString(2));
+    // console.log("whole" + " " + whole);
+    // console.log("fract" + " " + fract);
+    whole = whole.slice(1);
+
     let answer = "";
-    whole = Number(whole);
-    if (whole < 0) {
+
+    if (whole[0] < 0) {
         answer += 1;
     } else {
         answer += 0;
     }
-    whole = whole.toString();
+
     let exp = exponent.toString(2);
-    for (let i = 0; i < exp.lengtht; i++) {
-        answer += exp[i];
-    }
+        answer += exp;
 
     if (fract != undefined) {
         answer += whole;
@@ -111,7 +115,7 @@ function decToFloat(value) {
                     return converter(wholePart, fractPart, expCount + 127);
                 } else {
                     let point = binaryNum.indexOf(".");
-                    expCount = point;
+                    expCount = point + 1;
                     
                     if (fractPart.length + wholePart.length > 23) {
                         if (fractPart[23] === "1" ) {
@@ -135,13 +139,14 @@ function decToFloat(value) {
                         for (let j = 0; j < 23 - fractPart.length; j++){
                             fractPart += "0";
                         }
+                        return converter(wholePart, fractPart, expCount + 127);
                     }
 
-                    return converter(wholePart, fractPart, expCount + 127);
+                    return;
                 }
             } else {
                 let point = binaryNum.indexOf(".");
-                    expCount = point;
+                    expCount = point - 1;
                     
                     if (fractPart.length + wholePart.length > 23) {
                         if (fractPart[23] === "1" ) {
@@ -162,12 +167,14 @@ function decToFloat(value) {
                         fractPart = fractPart.slice(0, 23);
                         return converter(wholePart, fractPart, expCount + 127);
                     } else if (fractPart.length + wholePart.length < 23) {
-                        for (let j = 0; j < 23 - fractPart.length; j++){
+                        let counter =  fractPart.length;
+                        for (let j = 0; j < 24 - counter - wholePart.length; j++){
                             fractPart += "0";
                         }
+                        return converter(wholePart, fractPart, expCount + 127);
                     }
 
-                    return converter(wholePart, fractPart, expCount + 127);
+                    return;
             }
         }
     }
