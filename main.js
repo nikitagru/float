@@ -9,9 +9,9 @@
 // преобразовывать числа в нормализованный вид 
 
 
-let userValue = "35.25";
+let userValue = "420D0000";
 
-let type = "decToFloat";
+let type = "floatToDec";
 
 function finAnswer(convertType, value) {
     if (convertType === "decToFloat") {
@@ -25,17 +25,12 @@ function finAnswer(convertType, value) {
 
 let answer = finAnswer(type, userValue);
 
+answer = answer.toString();
+console.log(answer);
 
-console.log("Base 2" + " " + answer);
-
-let hexAns = parseInt(answer, 2).toString(16);
-console.log("Base 16" + " " + hexAns);
 
 function converter(whole, fract, exponent) {
 
-    // console.log("exponent" + " " + exponent.toString(2));
-    // console.log("whole" + " " + whole);
-    // console.log("fract" + " " + fract);
     whole = whole.slice(1);
 
     let answer = "";
@@ -55,8 +50,8 @@ function converter(whole, fract, exponent) {
     } else {
         answer += whole;
     }
-
-    return answer;
+    let hexAns = parseInt(answer, 2).toString(16);
+    return hexAns;
 }
 
 
@@ -185,3 +180,51 @@ function decToFloat(value) {
         }
     }
 }
+
+
+function convertToDec(binaryValue) {
+    let plus = binaryValue[0];
+    let exponent = binaryValue.slice(1, 9);
+    let maintiss = binaryValue.slice(9);
+
+    let decExp = parseInt(exponent, 2).toString(10);
+    decExp = Number(decExp);
+    decExp -= 127;
+
+    let indexOfOne = [];
+    for (let i = 0; i < maintiss.length; i++) {
+        if(maintiss[i] === "1") {
+            indexOfOne.push(i + 1);
+        }
+    }
+
+    let decMantiss = 0;
+
+    for (let i = 0; i < indexOfOne.length; i++) {
+        decMantiss += Math.pow(2, indexOfOne[i]);
+    }
+
+    if (plus === "1") {
+        let answer = -1 * (1 + (decMantiss / Math.pow(2, 23))) * Math.pow(2, decExp);
+        return answer;
+    } else {
+        let answer = 1 * (1 + (decMantiss / Math.pow(2, 23))) * Math.pow(2, decExp);
+        return answer;
+    }
+    
+    
+}
+
+function floatToDec(value) {
+    let binNum = parseInt(value, 16).toString(2);
+
+    if (binNum.length < 32) {
+        let newBin = "0" + binNum;
+        return convertToDec(newBin);
+    } else {
+        return convertToDec(binNum);
+    }
+
+     
+}
+
